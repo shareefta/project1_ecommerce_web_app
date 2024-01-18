@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section-content padding-y bg">
+    <div class="container">
+        <!-- ============================ COMPONENT 1 ================================= -->
+        <div class="row">
+            <aside class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 text-center">Billing Address</h4>
+                        <form action="{% url 'orders:place_order' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <h5 class="text-center text-white bg-warning" style="border-radius: 8px; padding: 10px;">Choose Delivery address:</h5>
+                                <div class="custom-control custom-radio">
+                                    {% for address in user_addresses %}
+                                        <input type="radio" id="address{{ address.id }}" name="selected_address" class="custom-control-input" value="{{ address.id }}">
+                                        <label class="custom-control-label" for="address{{ address.id }}">
+                                            {{ address.full_name }} - {{ address.address_line_1 }}, {{ address.city }}
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                    </div>
+                </div> <!-- card.// -->
+            </aside> <!-- col.// -->
+
+            <aside class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-borderless table-shopping-cart">
+                            <thead class="text-muted">
+                            <tr class="small text-uppercase">
+                                <th scope="col">Product</th>
+                                <th scope="col" width="120">Quantity</th>
+                                <th scope="col" width="120">Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for cart_item in cart_items %}
+                            <tr>
+                                <td>
+                                    <figure class="itemside align-items-center">
+                                        <div class="aside"><img src="{{ cart_item.product.product_image.url }}"
+                                                                class="img-sm">
+                                        </div>
+                                        <figcaption class="info">
+                                            <a href="{{ cart_item.product.get_url }}" class="title text-dark">
+                                                {{ cart_item.product.product_name }}</a>
+                                            <p class="text-muted small">
+                                                {% if cart_item.variant.all %}
+                                                    {% for item in cart_item.variant.all %}
+                                                        {{ item.variant_category | capfirst }}: {{ item.variant_value | capfirst }} <br>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </p>
+                                        </figcaption>
+                                    </figure>
+                                </td>
+                                <td>
+                                    <label>{{ cart_item.quantity }}</label>
+                                </td>
+                                <td>
+                                    <div class="price-wrap">
+                                        <var class="price">Rs. {{ cart_item.sub_total }}</var>
+                                        <small class="text-muted"> Rs. {{ cart_item.product.price }} each </small>
+                                    </div> <!-- price-wrap .// -->
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <button type="submit" name="submit" class="btn btn-primary btn-block">Proceed to Place Order</button>
+                        <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+                        </form>
+                    </div> <!-- card-body.// -->
+                </div> <!-- card.// -->
+            </aside> <!-- col.// -->
+        </div> <!-- row.// -->
+        <!-- ============================ COMPONENT 1 END .// ================================= -->
+
+    </div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}
+
+<!--<script>-->
+<!--    // Show/hide the new address form based on the checkbox-->
+<!--    document.getElementById('add_new_address').addEventListener('change', function() {-->
+<!--        document.getElementById('new_address_form').style.display = this.checked ? 'block' : 'none';-->
+<!--    });-->
+<!--</script>-->
