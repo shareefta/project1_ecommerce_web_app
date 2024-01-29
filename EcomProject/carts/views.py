@@ -185,30 +185,34 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         for cart_item in cart_items:
             total += (cart_item.product.price * cart_item.quantity)
             quantity += cart_item.quantity
-        tax = (2 * total)/100
+        tax = (2 * total) / 100
         grand_total = total + tax
     except ObjectDoesNotExist:
         pass
 
     current_user = request.user
     user_addresses = Address.objects.filter(user=current_user)
+
     if request.method == 'POST':
         # User selected an existing address
         selected_address_id = request.POST.get('selected_address', None)
         if selected_address_id:
-            address = Address.objects.get(id=selected_address_id)
+            address = get_object_or_404(Address, id=selected_address_id)
         else:
             pass
+
+        # Create the order and associate it with the selected or new address
         data = Order()
         data.user = current_user
         data.address = address
+        data.save()
 
     context = {
-        'total' : total,
-        'quantity' : quantity,
-        'cart_items' : cart_items,
-        'tax' : tax,
-        'grand_total' : grand_total,
-        'user_addresses' : user_addresses,
+        'total': total,
+        'quantity': quantity,
+        'cart_items': cart_items,
+        'tax': tax,
+        'grand_total': grand_total,
+        'user_addresses': user_addresses,
     }
     return render(request, 'store/checkout.html', context)

@@ -20,6 +20,7 @@
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
+                                        <th class="table-heading text-center font-weight-bold bg-primary text-white border-bottom mb-3" scope="col">Sl. No.</th>
                                         <th class="table-heading text-center font-weight-bold bg-primary text-white border-bottom mb-3" scope="col">Order Number</th>
                                         <th class="table-heading text-center font-weight-bold bg-primary text-white border-bottom mb-3" scope="col">Order Total</th>
                                         <th class="table-heading text-center font-weight-bold bg-primary text-white border-bottom mb-3" scope="col">Order Status</th>
@@ -30,14 +31,19 @@
                                     <tbody>
                                     {% for order in orders %}
                                     <tr>
+                                        <td class="text-center">{{ forloop.counter }}</td>
                                         <th class="text-center" scope="row"><a href="{% url 'order_detail' order.order_number %}">{{ order.order_number }}</a></th>
-                                        <td>{{ order.order_total }}</td>
+                                        <td class="text-center">{{ order.order_total }}</td>
                                         <td class="text-center">{{ order.status }}</td>
                                         <td class="text-center">{{ order.created_at }}</td>
                                         <td class="text-center">
-                                            <a href="{% url 'user_cancel_order' order.id %}" class="btn btn-danger"
-                                            onclick="return confirm('Are you sure you want to cancel this Order?')">
-                                                Delete <i class="fas fa-chevron"></i></a>
+                                            <form action="{% url 'user_cancel_order' order.id %}" method="POST">
+                                            {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this Order?')" {% if order.is_cancelled %}disabled{% endif %}>
+                                                <i class="fas fa-chevron"></i>
+                                                    {% if order.status == 'Accepted' %}Cancel Order{% endif %}
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                     {% endfor %}

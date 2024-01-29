@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import Account, Address
+from django.utils import timezone
 from store.models import Product, Variant
 
 # Create your models here.
@@ -10,6 +11,7 @@ class Payment(models.Model):
     amount_paid = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.payment_id
@@ -18,49 +20,39 @@ class Payment(models.Model):
 class Order(models.Model):
     STATUS = (
         ('New', 'New'),
+        ('Pending', 'Pending'),
         ('Accepted', 'Accepted'),
-        ('Completed', 'Completed'),
         ('Cancelled', 'Cancelled'),
+        ('Delivered', 'Delivered'),
+        ('Returned', 'Returned'),
+        ('Completed', 'Completed'),
     )
 
     user = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True)
     order_number = models.CharField(max_length=30, unique=True)
-    # first_name = models.CharField(max_length=50)
-    # last_name = models.CharField(max_length=50)
-    # phone = models.CharField(max_length=15)
-    # email = models.EmailField(max_length=50)
-    # address_line_1 = models.CharField(max_length=50)
-    # address_line_2 = models.CharField(max_length=50, blank=True)
-    # country = models.CharField(max_length=50)
-    # state = models.CharField(max_length=50)
-    # city = models.CharField(max_length=50)
-    # order_note = models.CharField(max_length=100, blank=True)
     order_total = models.FloatField()
     tax = models.FloatField()
     status = models.CharField(max_length=10, choices=STATUS, default='New')
     ip = models.CharField(blank=True, max_length=20)
     is_ordered = models.BooleanField(default=False)
+    is_cancelled = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # def full_name(self):
-    #     return f'{self.first_name} {self.last_name}'
 
-    # def full_address(self):
-    #     return f'{self.address_line_1} {self.address_line_2}'
-    #
     def __unicode__(self):
         return self.user.first_name
 
 class OrderProduct(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='products')
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     variant = models.ManyToManyField(Variant, blank=True)
     quantity = models.IntegerField()
+    tax = models.FloatField(default=0.0)
     product_price = models.FloatField()
     ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

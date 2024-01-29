@@ -12,23 +12,23 @@
                 <div class="card">
                     <form action="{% url 'orders:make_payments' order_id=order.id %}" method="POST">
                         {% csrf_token %}
-                      <h5 class="card-header text-center">Billing Address</h5>
-                      <div class="card-body">
-                          <p class="card-text mb-0">{{ order_address.full_name }}</p>
-                          <p class="card-text mb-0">{{ order_address.full_address }}</p>
-                          <p class="card-text mb-0">{{ order_address.city }}, {{ order_address.state }}</p>
-                          <p class="card-text mb-0">{{ order_address.country }}</p>
-                          <p class="card-text mb-0">{{ order_address.phone_number }}</p>
-<!--                          {% if order.order_note%}-->
-<!--                            <b>Order Note: </b> {{ order.order_note }}-->
-<!--                          {% endif %}-->
-                      </div>
+                        <h5 class="card-header text-center">Billing Address</h5>
+                        <div class="card-body">
+                            <p class="card-text mb-0">{{ order_address.full_name }}</p>
+                            <p class="card-text mb-0">{{ order_address.full_address }}</p>
+                            <p class="card-text mb-0">{{ order_address.city }}, {{ order_address.state }}</p>
+                            <p class="card-text mb-0">{{ order_address.country }}</p>
+                            <p class="card-text mb-0">{{ order_address.phone_number }}</p>
+                            <!--                          {% if order.order_note%}-->
+                            <!--                            <b>Order Note: </b> {{ order.order_note }}-->
+                            <!--                          {% endif %}-->
+                        </div>
                 </div>
                 <div class="card">
-                      <h5 class="card-header text-center">Product Reviews</h5>
-                      <div class="card-body">
-                          <p class="card-text"></p>
-                          <table class="table table-borderless table-shopping-cart">
+                    <h5 class="card-header text-center">Product Reviews</h5>
+                    <div class="card-body">
+                        <p class="card-text"></p>
+                        <table class="table table-borderless table-shopping-cart">
                             <thead class="text-muted">
                             <tr class="small text-uppercase">
                                 <th scope="col">Product</th>
@@ -49,9 +49,10 @@
                                                 {{ cart_item.product.product_name }}</a>
                                             <p class="text-muted small">
                                                 {% if cart_item.variant.all %}
-                                                    {% for item in cart_item.variant.all %}
-                                                        {{ item.variant_category | capfirst }}: {{ item.variant_value | capfirst }} <br>
-                                                    {% endfor %}
+                                                {% for item in cart_item.variant.all %}
+                                                {{ item.variant_category | capfirst }}: {{ item.variant_value | capfirst
+                                                }} <br>
+                                                {% endfor %}
                                                 {% endif %}
                                             </p>
                                         </figcaption>
@@ -70,13 +71,14 @@
                             {% endfor %}
                             </tbody>
                         </table>
-                      </div>
+                    </div>
                 </div>
             </aside> <!-- col.// -->
             <aside class="col-lg-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="text-center text-white bg-warning" style="border-radius: 8px; padding: 10px;"> Order Summary </h5>
+                        <h5 class="text-center text-white bg-warning" style="border-radius: 8px; padding: 10px;"> Order
+                            Summary </h5>
                         <dl class="dlist-align">
                             <dt>Total Price:</dt>
                             <dd class="text-right">Rs. {{ total }}</dd>
@@ -89,24 +91,28 @@
                             <dt>Grand Total:</dt>
                             <dd class="text-right text-dark b"><strong>Rs. {{ grand_total }}</strong></dd>
                         </dl>
-                        <h5 class="text-center text-white bg-warning" style="border-radius: 8px; padding: 10px;">Select Payment Method</h5>
-                            <dl class="dlist-align">
-                                <dt><input type="radio" name="paymentMethod" value="CashOnDelivery" required> Cash On Delivery </dt>
-                                <dd class="text-right"></dd>
-                            </dl>
-                            <dl class="dlist-align">
-                                <dt><input type="radio" name="paymentMethod"> Net Banking </dt>
-                                <dd class="text-right"></dd>
-                            </dl>
-                            <dl class="dlist-align">
-                                <dt><input type="radio" name="paymentMethod"> Debit/Credit Card </dt>
-                                <dd class="text-right"></dd>
-                            </dl>
-                            <dl class="dlist-align">
-                                <dt><input type="radio" name="paymentMethod"> UPI Payment </dt>
-                                <dd class="text-right"></dd>
-                            </dl>
-                            <button type="submit" class="btn btn-primary btn-block">Place Order</button>
+                        <h5 class="text-center text-white bg-warning" style="border-radius: 8px; padding: 10px;">Select
+                            Payment Method</h5>
+                        <dl class="dlist-align">
+                            <dt><input type="radio" name="paymentMethod" value="CashOnDelivery" required> Cash On
+                                Delivery
+                            </dt>
+                            <dd class="text-right"></dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt><input type="radio" name="paymentMethod" value="PayPal"> PayPal</dt>
+                            <dd class="text-right"></dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt><input type="radio" name="paymentMethod"> Debit/Credit Card</dt>
+                            <dd class="text-right"></dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt><input type="radio" name="paymentMethod"> UPI Payment</dt>
+                            <dd class="text-right"></dd>
+                        </dl>
+
+                        <button type="submit" class="btn btn-primary btn-block">Place Order</button>
                         </form>
                     </div> <!-- card-body.// -->
                 </div> <!-- card.// -->
@@ -117,4 +123,5 @@
     </div> <!-- container .//  -->
 </section>
 <!-- ========================= SECTION CONTENT END// ========================= -->
+
 {% endblock %}

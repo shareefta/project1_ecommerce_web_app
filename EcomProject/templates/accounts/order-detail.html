@@ -12,26 +12,13 @@
                 <div class="panel-body p30">
                     <div class="row">
                         <!-- Start .row -->
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <!-- col-lg-6 start here -->
                             <div class="invoice-logo"><img src="{% static '/images/logo.png' %}" alt="Invoice logo" style="max-height: 40px;"></div>
-                        </div>
-                        <!-- col-lg-6 end here -->
-                        <div class="col-lg-6">
-                            <!-- col-lg-6 start here -->
-                            <div class="invoice-from">
-                                <ul class="list-unstyled text-right">
-                                    <li><strong>Invoiced To</strong></li>
-                                    <li>{{ order.full_name }}</li>
-                                    <li>{{ order.full_address }}</li>
-                                    <li>{{ order.city}}, {{ order.state }}</li>
-                                    <li>{{ order.country }}</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- col-lg-6 end here -->
-                        <div class="col-lg-12">
-                            <!-- col-lg-12 start here -->
+                        </div> <!-- col-lg-12 end here -->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
                             <div class="invoice-details mt25">
                                 <div class="well">
                                     <ul class="list-unstyled mb0">
@@ -42,6 +29,23 @@
                                     </ul>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <!-- col-lg-6 start here -->
+                            <div class="invoice-from">
+                                <ul class="list-unstyled text-right">
+                                    <li><strong>Invoiced To</strong></li>
+                                    <li>{{ order.address.full_name }}</li>
+                                    <li>{{ order.address.full_address }}</li>
+                                    <li>{{ order.address.city}}</li>
+                                    <li>{{ order.address.state }}, {{ order.address.country }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="col-lg-12">
+                            <!-- col-lg-12 start here -->
+
 
                             <div class="invoice-items">
                                 <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">

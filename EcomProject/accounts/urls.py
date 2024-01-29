@@ -35,7 +35,7 @@ urlpatterns = [
     # ORDER MANAGEMENT
     path('order_list', views.order_list, name="order_list"),
     path('change_order_status/<int:order_id>/', views.change_order_status, name='change_order_status'),
-    path('cancel_order/<int:order_id>/', views.cancel_order, name='cancel_order'),
+    # path('cancel_order/<int:order_id>/', views.cancel_order, name='cancel_order'),
 
     #USER
     path('register_user',views.register_user, name='register_user'),
@@ -50,5 +50,5 @@ urlpatterns = [
     path('user_cancel_order/<int:order_id>/', views.user_cancel_order, name='user_cancel_order'),
     path('address_list/', views.address_list, name='address_list'),
     path('add_address/', views.add_address, name='add_address'),
-    path('edit_address/<int:address_id>/', views.edit_address, name='edit_address')
+    path('edit_address/<int:address_id>/', views.edit_address, name='edit_address'),
 ]

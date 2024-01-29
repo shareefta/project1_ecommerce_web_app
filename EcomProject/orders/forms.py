@@ -1,12 +1,19 @@
 from django import forms
 from .models import Order
 
-# class OrderForm(forms.ModelForm):
-#     class Meta:
-#         model = Order
-#         fields = ['first_name', 'last_name', 'phone', 'email', 'address_line_1', 'address_line_2', 'country', 'state', 'city', 'order_note']
 
 class ChangeStatusForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['status']
+
+
+class SalesReportForm(forms.Form):
+    start_date = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        label='Start Date'
+    )
+    end_date = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        label='End Date'
+    )

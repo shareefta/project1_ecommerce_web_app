@@ -32,17 +32,19 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'accounts',
-    'category',
-    'store',
-    'carts',
-    'orders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
+    'category',
+    'store',
+    'carts',
+    'orders',
+    'crispy_forms',
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -146,9 +148,27 @@ MESSAGE_TAGS = {
 }
 
 
-ACCOUNT_SID = 'AC473ae073ce3bcbc087e8973ad48a852f'
-AUTH_TOKEN = '75168fe0d1c4065a741129d0b886fe0c'
+ACCOUNT_SID = 'AC864b1d314207c2639aafe3ea84cbfb9c'
+AUTH_TOKEN = 'f5db8fa61c45db982858b24f1f2c9d27'
 COUNTRY_CODE='+91'
-TWILIO_PHONE_NUMBER='+12059275674'
+TWILIO_PHONE_NUMBER='+15102914904'
+
+# zazor_pay_key_id = 'rzp_test_XsynSDwOIqD9jA'
+# key_secret = 'TSfOPHu4Qnu7YJzOygStAEP0'
+
+
+# PAYPAL_CLIENT_ID = 'AZSyRZ9K1BbMnYd_jDHWjUALsYhU1XBnGDHNZQ9ce5dJR7474GV6fLkHoqVa9DibDx5ZbXScUgtvM0dK'
+# PAYPAL_SECRET_KEY = 'AZSyRZ9K1BbMnYd_jDHWjUALsYhU1XBnGDHNZQ9ce5dJR7474GV6fLkHoqVa9DibDx5ZbXScUgtvM0dK'
+# PAYPAL_MODE = 'sandbox'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+USE_TZ = True
+
+PAYPAL_RECEIVER_EMAIL = 'mybusiness.sandbox@gmail.com'
+PAYPAL_TEST = True
+
+
+
 
 

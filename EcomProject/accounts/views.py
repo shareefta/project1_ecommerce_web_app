@@ -391,12 +391,20 @@ def change_order_status(request, order_id):
     return render(request, 'admin/change-order-status.html', {'form': form, 'order_id': order_id})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@login_required(login_url='login_admin')
-def cancel_order(request, order_id):
-    order_to_delete = Order.objects.filter(id=order_id)
-    order_to_delete.delete()
+@login_required(login_url='login_user')
+def user_cancel_order(request, order_id):
+    order_to_cancel = Order.objects.get(id=order_id)
+    order_to_cancel.status = 'Cancelled'
+    order_to_cancel.is_cancelled = True
+    order_to_cancel.save()
 
-    return redirect('order_list')
+    # Increase product stock for each item in the canceled order
+    for order_product in order_to_cancel.products.all():
+        product = order_product.product
+        product.stock += order_product.quantity
+        product.save()
+
+    return redirect('my_orders')
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)

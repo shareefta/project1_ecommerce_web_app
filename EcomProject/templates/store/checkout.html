@@ -10,20 +10,28 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title mb-4 text-center">Billing Address</h4>
+                        <div class="card-body">
+                            <a href="{% url 'orders:add_address_checkout' %}" class="btn btn-success"> Add New Address <i
+                            class="fas fa-chevron"></i></a>
+                        </div>
                         <form action="{% url 'orders:place_order' %}" method="POST">
                             {% csrf_token %}
-                            <div class="form-group">
-                                <h5 class="text-center text-white bg-warning" style="border-radius: 8px; padding: 10px;">Choose Delivery address:</h5>
-                                <div class="custom-control custom-radio">
-                                    {% for address in user_addresses %}
-                                        <input type="radio" id="address{{ address.id }}" name="selected_address" class="custom-control-input" value="{{ address.id }}">
-                                        <label class="custom-control-label" for="address{{ address.id }}">
-                                            {{ address.full_name }} - {{ address.address_line_1 }}, {{ address.city }}
-                                        </label>
-                                    {% endfor %}
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <h5 class="text-center text-white bg-warning" style="border-radius: 8px; padding: 5px;">Choose Delivery address:</h5>
+                                    <div class="custom-control custom-radio">
+                                        {% for address in user_addresses %}
+                                            <div>
+                                                <input type="radio" id="address{{ address.id }}" name="selected_address" class="custom-control-input" value="{{ address.id }}" required>
+                                                <label class="custom-control-label" for="address{{ address.id }}">
+                                                {{ address.full_name }} - {{ address.address_line_1 }}, {{ address.city }}
+                                            </label>
+                                            </div>
+
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
-
                     </div>
                 </div> <!-- card.// -->
             </aside> <!-- col.// -->
@@ -88,9 +96,3 @@
 
 {% endblock %}
 
-<!--<script>-->
-<!--    // Show/hide the new address form based on the checkbox-->
-<!--    document.getElementById('add_new_address').addEventListener('change', function() {-->
-<!--        document.getElementById('new_address_form').style.display = this.checked ? 'block' : 'none';-->
-<!--    });-->
-<!--</script>-->
