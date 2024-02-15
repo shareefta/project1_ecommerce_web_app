@@ -48,8 +48,7 @@ class OrderAdmin(admin.ModelAdmin, SalesReportMixin):
         extra_context['yearly_sales'] = self.get_yearly_sales(Order.objects.filter(status='Accepted'))
         return super().changelist_view(request, extra_context=extra_context)
 
-admin.site.register(Order, OrderAdmin)
-admin.site.register(OrderProduct)
+
 
 class PaymentAdmin(admin.ModelAdmin, SalesReportMixin):
 
@@ -60,5 +59,6 @@ class PaymentAdmin(admin.ModelAdmin, SalesReportMixin):
         extra_context['yearly_sales'] = self.get_yearly_sales(Payment.objects.all())
         return super().changelist_view(request, extra_context=extra_context)
 
-
+admin.site.register(Order, OrderAdmin)
+admin.site.register(OrderProduct)
 admin.site.register(Payment, PaymentAdmin)

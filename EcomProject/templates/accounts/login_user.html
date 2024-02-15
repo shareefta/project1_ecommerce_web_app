@@ -17,7 +17,14 @@
                         <label>Phone Number</label>
                         <input type="text" class="form-control" placeholder="Registered Phone Number" name="phone_number" required>
                     </div> <!-- form-group end.// -->
+                    <div class="form-group col-md-12">
+                        <label>Email</label>
+                        <input type="email" class="form-control" placeholder="Registered Email" name="email" required>
+                    </div> <!-- form-group end.// -->
                 </div> <!-- form-row.// -->
+                    <div class="form-group">
+                        <a href="{% url 'forgot_password' %}" class="float-right">Forgot password?</a>
+                    </div> <!-- form-group form-check .// -->
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">Request OTP</button>
                 </div> <!-- form-group// -->

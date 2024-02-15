@@ -85,7 +85,7 @@ Users List
                                     <p class="title mb-0"> <a href="{% url 'orders:order_detail_admin' order.order_number %}"> {{ order.order_number }} </a></p>
                                 </td>
                                 <td class="text-center">
-                                    <p class="title mb-0"> {{ order.order_total }} </p>
+                                    <p class="title mb-0"> {{ order.order_total | floatformat:2 }} </p>
                                 </td>
                                 <td class="text-center">
                                     <p class="title mb-0"> {{ order.status }} </p>

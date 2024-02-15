@@ -39,6 +39,7 @@
             <aside class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
+                        <h5 class="text-center text-white bg-warning" style="border-radius: 8px; padding: 5px;"> Order Summary </h5>
                         <table class="table table-borderless table-shopping-cart">
                             <thead class="text-muted">
                             <tr class="small text-uppercase">
@@ -72,15 +73,36 @@
                                     <label>{{ cart_item.quantity }}</label>
                                 </td>
                                 <td>
-                                    <div class="price-wrap">
-                                        <var class="price">Rs. {{ cart_item.sub_total }}</var>
-                                        <small class="text-muted"> Rs. {{ cart_item.product.price }} each </small>
-                                    </div> <!-- price-wrap .// -->
+                                    {% if cart_item.product.offer_percentage > 0 %}
+                                        <div class="price-wrap">
+                                            <var class="price">Rs. {{ cart_item.sub_total_offer }} </var>
+                                            <small class="text-muted"> Rs. {{ cart_item.product.offer_price }} each </small>
+                                        </div> <!-- price-wrap .// -->
+                                    {% else %}
+                                        <div class="price-wrap">
+                                            <var class="price">Rs. {{ cart_item.sub_total }} </var>
+                                            <small class="text-muted"> Rs. {{ cart_item.product.price }} each </small>
+                                        </div> <!-- price-wrap .// -->
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
                             </tbody>
                         </table>
+                            <div class="card col-md-12">
+                                <div class="card-body text-center">
+                                    <span>Sub Total:</span>
+                                    <span class="text-right"><strong>Rs. {{ total | floatformat:2 }}</strong> | </span>
+                                    <span>Tax:</span>
+                                    <span class="text-right"><strong>Rs. {{ tax | floatformat:2 }}</strong> | </span>
+                                    <span>Grand Total:</span>
+                                    <span class="text-right"><strong>Rs. {{ grand_total | floatformat:2 }}</strong></span>
+                                    {% if total_discount > 0 %}
+                                    <hr>
+                                     <p class="text-center">You have saved! <strong>Rs. {{ total_discount | floatformat:2 }}</strong></p>
+                                    {% endif %}
+                                </div> <!-- card-body.// -->
+                            </div> <!-- card.// -->
                         <button type="submit" name="submit" class="btn btn-primary btn-block">Proceed to Place Order</button>
                         <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
                         </form>

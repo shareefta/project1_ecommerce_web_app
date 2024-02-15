@@ -1,0 +1,65 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}
+Users List
+{% endblock title %}
+
+
+{% block custom_css %}
+{% endblock custom_css %}
+
+{% block page_title %}
+Users List
+{% endblock page_title %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+    <div class="container">
+        <div class="row">
+            {% include 'includes/sidebar-admin-dashboard.html' %}
+            <main class="col-md-9">
+                <article class="card">
+                    <header class="card-header">
+                        <strong class="d-inline-block mr-3">Coupon Details</strong>
+                    </header>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Sl. No.</th>
+                                            <th scope="col">Coupon Code</th>
+                                            <th scope="col">Min. Purchase Amount</th>
+                                            <th scope="col">Discount Amount</th>
+                                            <th scope="col">Valid Till</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for coupon in coupons %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ coupon.coupon_code }}</td>
+                                            <td>{{ coupon.minimum_amount }}</td>
+                                            <td>{{ coupon.discount }}</td>
+                                            <td>{{ coupon.valid_to|date:"d-m-Y" }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- row.// -->
+                    </div> <!-- card-body .// -->
+                </article> <!-- order-group.// -->
+            </main>
+        </div> <!-- row.// -->
+    </div>
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock%}
+
+
+{% block custom_js %}
+{% endblock custom_js %}

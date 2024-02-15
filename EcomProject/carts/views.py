@@ -1,7 +1,9 @@
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from store.models import Product, Variant
-from .models import Cart, CartItem
+from .models import Cart, CartItem, UserCoupons, Coupons
 from accounts.models import Address
 from accounts.forms import AddressForm
 from orders.models import Order
@@ -26,15 +28,31 @@ def cart(request, total=0, quantity=0, cart_items=None):
         else:
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+
+        total_discount = 0
+
         for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity)
-            quantity += cart_item.quantity
+            if cart_item.product.offer_percentage > 0:
+                discount_price = (cart_item.product.offer_percentage * cart_item.product.price) / 100
+                total_discount += discount_price * cart_item.quantity
+                cart_item.product.offer_price = cart_item.product.price - discount_price
+                total += (cart_item.product.offer_price * cart_item.quantity)
+                quantity += cart_item.quantity
+            else:
+                total += (cart_item.product.price * cart_item.quantity)
+                quantity += cart_item.quantity
+        #Total amount befor discount
+        net_total = total + total_discount
         tax = (2 * total)/100
+        #Total amount after discount
         grand_total = total + tax
+
     except ObjectDoesNotExist:
         pass
 
     context = {
+        'net_total' : net_total,
+        'total_discount' : total_discount,
         'total' : total,
         'quantity' : quantity,
         'cart_items' : cart_items,
@@ -182,16 +200,32 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         else:
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+
+        total_discount = 0
+
         for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity)
-            quantity += cart_item.quantity
-        tax = (2 * total) / 100
+            if cart_item.product.offer_percentage > 0:
+                discount_price = (cart_item.product.offer_percentage * cart_item.product.price) / 100
+                total_discount += discount_price * cart_item.quantity
+                cart_item.product.offer_price = cart_item.product.price - discount_price
+                total += (cart_item.product.offer_price * cart_item.quantity)
+                quantity += cart_item.quantity
+            else:
+                total += (cart_item.product.price * cart_item.quantity)
+                quantity += cart_item.quantity
+        #Total amount befor discount
+        net_total = total + total_discount
+        tax = (2 * total)/100
+        #Total amount after discount
         grand_total = total + tax
+
     except ObjectDoesNotExist:
         pass
 
     current_user = request.user
     user_addresses = Address.objects.filter(user=current_user)
+
+
 
     if request.method == 'POST':
         # User selected an existing address
@@ -199,16 +233,19 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         if selected_address_id:
             address = get_object_or_404(Address, id=selected_address_id)
         else:
-            pass
+            messages.error(request, "Please add at least one address before placing an order.")
+            return redirect('orders:add_address_checkout')
 
-        # Create the order and associate it with the selected or new address
+        # Create the order object and associate it with the selected or new address
         data = Order()
         data.user = current_user
         data.address = address
         data.save()
 
     context = {
+        'net_total': net_total,
         'total': total,
+        'total_discount': total_discount,
         'quantity': quantity,
         'cart_items': cart_items,
         'tax': tax,

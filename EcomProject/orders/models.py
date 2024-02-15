@@ -9,6 +9,7 @@ class Payment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     payment_id = models.CharField(max_length=100)
     amount_paid = models.CharField(max_length=100)
+    discount = models.FloatField(default=0)
     status = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     timestamp = models.DateTimeField(default=timezone.now)
@@ -19,13 +20,14 @@ class Payment(models.Model):
 
 class Order(models.Model):
     STATUS = (
-        ('New', 'New'),
         ('Pending', 'Pending'),
-        ('Accepted', 'Accepted'),
+        ('Order Confirmed', 'Order Confirmed'),
+        ('Return Requested', 'Return Requested'),
+        ('Return Approved', 'Return Approved'),
+        ('Return Rejected', 'Return Rejected'),
+        ('Return Received', 'Return Received'),
         ('Cancelled', 'Cancelled'),
         ('Delivered', 'Delivered'),
-        ('Returned', 'Returned'),
-        ('Completed', 'Completed'),
     )
 
     user = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
@@ -34,12 +36,13 @@ class Order(models.Model):
     order_number = models.CharField(max_length=30, unique=True)
     order_total = models.FloatField()
     tax = models.FloatField()
-    status = models.CharField(max_length=10, choices=STATUS, default='New')
+    status = models.CharField(max_length=20, choices=STATUS, default='Pending')
     ip = models.CharField(blank=True, max_length=20)
     is_ordered = models.BooleanField(default=False)
     is_cancelled = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    coupon_discount = models.FloatField(default=0.0)
 
 
     def __unicode__(self):
@@ -57,6 +60,8 @@ class OrderProduct(models.Model):
     ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    product_discount = models.FloatField(default=0.0)
 
     def __unicode__(self):
         return self.product.prodcut_name
+

@@ -3,8 +3,11 @@ from . import views
 
 urlpatterns = [
 
-    #ADMIN
+    #REGISTRATION
     path('register/', views.register, name="register"),
+    # path('otp_verify/<str:uid>/', views.otp_verify, name='otp_verify'),
+
+    #ADMIN
     path('login_admin/', views.login_admin, name="login_admin"),
     path('dashboard_admin', views.dashboard_admin, name='dashboard_admin'),
     path('logout_admin/', views.logout_admin, name="logout_admin"),
@@ -37,13 +40,20 @@ urlpatterns = [
     path('change_order_status/<int:order_id>/', views.change_order_status, name='change_order_status'),
     # path('cancel_order/<int:order_id>/', views.cancel_order, name='cancel_order'),
 
-    #USER
-    path('register_user',views.register_user, name='register_user'),
+    #COUPON MANAGEMENT
+    path('coupon_list/', views.coupon_list, name='coupon_list'),
+
+    #PRODUCT OFFER MANAGEMENT
+    path('product_offer_list', views.product_offer_list, name='product_offer_list'),
+    path('add_product_offer', views.add_product_offer, name='add_product_offer'),
+
+    #USER DASHBOARD
     path('login_user',views.login_user, name='login_user'),
-    path('otp/<str:uid>/', views.otp_verify, name='otp'),
+    path('otp_verify_login/<str:uid>/', views.otp_verify_login, name='otp_verify_login'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('logout_user/', views.logout_user, name="logout_user"),
     path('my_orders/', views.my_orders, name='my_orders'),
+    path('my_coupons/', views.my_coupons, name='my_coupons'),
     path('edit_profile', views.edit_profile, name='edit_profile'),
     path('change_password', views.change_password, name='change_password'),
     path('order_detail/<int:order_id>/', views.order_detail, name='order_detail'),
@@ -51,4 +61,6 @@ urlpatterns = [
     path('address_list/', views.address_list, name='address_list'),
     path('add_address/', views.add_address, name='add_address'),
     path('edit_address/<int:address_id>/', views.edit_address, name='edit_address'),
+    path('forgot_password/',views.forgot_password,name="forgot_password"),
+    path('add_money_wallet', views.add_money_wallet, name='add_money_wallet'),
 ]

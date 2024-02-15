@@ -1,0 +1,93 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}
+Product Offer List
+{% endblock title %}
+
+
+{% block custom_css %}
+{% endblock custom_css %}
+
+{% block page_title %}
+Product Offer List
+{% endblock page_title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <a href="" class="btn btn-success"> Add Offer <i
+                            class="fas fa-chevron"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="search-element">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="get">
+                            <button class="btn  btn-primary" type="submit" style="float:right"><i
+                                    class="fas fa-search"></i> Search
+                            </button>
+                            <input class="form-control" type="search" placeholder="Search" aria-label="Search"
+                                   data-width="250" style="width: 250px;float:right" name="filter" value="{{ filter }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+    <div class="container">
+        <div class="row">
+            {% include 'includes/sidebar-admin-dashboard.html' %}
+            <main class="col-md-9">
+                <article class="card">
+                    <header class="card-header">
+                        <strong class="d-inline-block mr-3">Product Offer Details</strong>
+                    </header>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Sl. No.</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Prodcut Price</th>
+                                            <th scope="col">Offer Percentage</th>
+                                            <th scope="col">Offer Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in offer_products %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ product.product_name }}</td>
+                                            <td>Rs. {{ product.price }}</td>
+                                            <td>{{ product.offer_percentage }}%</td>
+                                            <td>Rs. {{ product.offer_price }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- row.// -->
+                    </div> <!-- card-body .// -->
+                </article> <!-- order-group.// -->
+            </main>
+        </div> <!-- row.// -->
+    </div>
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock%}
+
+
+{% block custom_js %}
+{% endblock custom_js %}

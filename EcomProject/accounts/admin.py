@@ -32,15 +32,5 @@ class AddressAdmin(admin.ModelAdmin):
 admin.site.register(Address, AddressAdmin)
 
 
-class AccountUserAdmin(UserAdmin):
-    list_display = ('full_name', 'email', 'phone_number', 'last_login', 'date_joined', 'is_active')
-    list_display_links = ('full_name', 'email', 'phone_number')
-    readonly_fields = ('last_login', 'date_joined')
-    ordering = ('-date_joined',)
 
-    filter_horizontal = ()
-    list_filter = ()
-    fieldsets = ()
-
-admin.site.register(AccountUser, AccountUserAdmin)
 admin.site.register(Profile)

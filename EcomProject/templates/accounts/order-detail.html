@@ -3,7 +3,8 @@
 
 {% block content %}
 
-<div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
+<div class="container"
+     style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
     <div class="row invoice row-printable">
         <div class="col-md-12">
             <!-- col-lg-12 start here -->
@@ -12,13 +13,27 @@
                 <div class="panel-body p30">
                     <div class="row">
                         <!-- Start .row -->
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <!-- col-lg-6 start here -->
-                            <div class="invoice-logo"><img src="{% static '/images/logo.png' %}" alt="Invoice logo" style="max-height: 40px;"></div>
-                        </div> <!-- col-lg-12 end here -->
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8">
+                            <div class="invoice-logo"><img src="{% static '/images/logo.png' %}" alt="Invoice logo"
+                                                           style="max-height: 40px;"></div>
+                        </div>
+                        <!-- col-lg-6 end here -->
+                        <div class="col-lg-6">
+                            <!-- col-lg-6 start here -->
+                            <div class="invoice-from">
+                                <ul class="list-unstyled text-right">
+                                    <li><strong>Invoiced To</strong></li>
+                                    <li>{{ order.address.full_name }}</li>
+                                    <li>{{ order.address.full_address }}</li>
+                                    <li>{{ order.address.city}}, {{ order.address.state }}</li>
+                                    <li>{{ order.address.country }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- col-lg-6 end here -->
+                        <div class="col-lg-12">
+                            <!-- col-lg-12 start here -->
                             <div class="invoice-details mt25">
                                 <div class="well">
                                     <ul class="list-unstyled mb0">
@@ -29,71 +44,57 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <!-- col-lg-6 start here -->
-                            <div class="invoice-from">
-                                <ul class="list-unstyled text-right">
-                                    <li><strong>Invoiced To</strong></li>
-                                    <li>{{ order.address.full_name }}</li>
-                                    <li>{{ order.address.full_address }}</li>
-                                    <li>{{ order.address.city}}</li>
-                                    <li>{{ order.address.state }}, {{ order.address.country }}</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                        <div class="col-lg-12">
-                            <!-- col-lg-12 start here -->
-
 
                             <div class="invoice-items">
                                 <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
                                     <table class="table table-bordered">
                                         <thead>
-                                            <tr>
-                                                <th class="per70 text-center">Description</th>
-                                                <th class="per5 text-center">Qty</th>
-                                                <th class="per25 text-center">Total</th>
-                                            </tr>
+                                        <tr>
+                                            <th class="per70 text-center">Description</th>
+                                            <th class="per25 text-center">Price</th>
+                                            <th class="per5 text-center">Qty</th>
+                                            <th class="per5 text-center">Discount</th>
+                                            <th class="per5 text-center">Total</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            {% for item in order_detail %}
-                                            <tr>
-                                                <td> {{ item.product.product_name }}
-                                                    <p class="text-muted small">
-                                                        {% if item.variant.all %}
-                                                            {% for i in item.variant.all %}
-                                                                {{ i.variant_category | capfirst }} : {{ i.variant_value | capfirst }} <br>
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    </p>
-                                                </td>
-                                                <td class="text-center">{{ item.quantity }}</td>
-                                                <td class="text-center">Rs. {{ item.product_price }}</td>
-                                            </tr>
-                                            {% endfor %}
+                                        {% for product in order_detail %}
+                                        <tr>
+                                            <td> {{ product.item.product.product_name }}
+                                                <p class="text-muted small">
+                                                    {% if product.item.variant.all %}
+                                                    {% for variant in product.item.variant.all %}
+                                                    {{ variant.variant_category | capfirst }} : {{ variant.variant_value | capfirst }} <br>
+                                                    {% endfor %}
+                                                    {% endif %}
+                                                </p>
+                                            </td>
+                                            <td class="text-center"> Rs. {{ product.item.product.price }} </td>
+                                            <td class="text-center"> {{ product.item.quantity }} </td>
+                                            <td class="text-center"> {{ product.item.product_discount }} </td>
+                                            <td class="text-center"> Rs. {{ product.total | floatformat:2 }} </td>
+                                        </tr>
+                                        {% endfor %}
                                         </tbody>
                                         <tfoot>
-                                            <tr>
-                                                <th colspan="2" class="text-right">Sub Total:</th>
-                                                <th class="text-center">Rs. {{ subtotal }}</th>
-                                            </tr>
-                                            <tr>
-                                                <th colspan="2" class="text-right">Tax:</th>
-                                                <th class="text-center">Rs. {{ order.tax }}</th>
-                                            </tr>
-
-                                            <tr>
-                                                <th colspan="2" class="text-right">Grand Total:</th>
-                                                <th class="text-center">Rs. {{ order.order_total }}</th>
-                                            </tr>
+                                        <tr>
+                                            <th colspan="4" class="text-right">Sub Total:</th>
+                                            <th class="text-center">Rs. {{ subtotal | floatformat:2 }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="4" class="text-right">Tax:</th>
+                                            <th class="text-center">Rs. {{ tax | floatformat:2 }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="4" class="text-right">Grand Total:</th>
+                                            <th class="text-center">Rs. {{ grand_total | floatformat:2 }}</th>
+                                        </tr>
                                         </tfoot>
                                     </table>
                                 </div>
-                            </div>
-                            <div class="invoice-footer mt25">
-                                <p class="text-center">Thank you for shopping with us!</p>
+                                <div>
+                                    <p class="text-center">You Saved! <strong>Rs. {{ total_product_discount }}</strong></p>
+                                </div>
                             </div>
                         </div>
                         <!-- col-lg-12 end here -->
@@ -101,9 +102,9 @@
                     <!-- End .row -->
                 </div>
             </div>
-            <!-- End .panel -->
+            <!-- End panel -->
         </div>
         <!-- col-lg-12 end here -->
     </div>
-    </div>
+</div>
 {% endblock %}

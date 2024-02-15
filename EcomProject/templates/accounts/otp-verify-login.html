@@ -10,7 +10,7 @@
         <div class="card-body">
             <h4 class="card-title mb-4 text-center">OTP VERIFICATION</h4>
             {% include 'includes/alerts.html' %}
-            <form action="{% url 'otp' uid=uid %}" method="POST">
+            <form action="{% url 'otp_verify_login' uid=uid %}" method="POST">
                 {% csrf_token %}
                 <div class="form-row">
                     <div class="form-group col-md-12">

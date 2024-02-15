@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Cart, CartItem
+from .models import Cart, CartItem, Coupons, UserCoupons
 # Register your models here.
+
 
 class CartAdmin(admin.ModelAdmin):
     list_display = ('cart_id', 'date_added')
@@ -8,5 +9,7 @@ class CartAdmin(admin.ModelAdmin):
 class CartItemAdmin(admin.ModelAdmin):
     list_display = ('product', 'cart', 'quantity', 'is_active')
 
-admin.site.register(Cart,CartAdmin)
-admin.site.register(CartItem,CartItemAdmin)
+admin.site.register(Cart, CartAdmin)
+admin.site.register(CartItem, CartItemAdmin)
+admin.site.register(Coupons)
+admin.site.register(UserCoupons)

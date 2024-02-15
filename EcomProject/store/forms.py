@@ -8,7 +8,7 @@ class ProductForm(forms.ModelForm):
                                        widget=forms.FileInput)
     class Meta:
         model = Product
-        fields = ['product_name', 'slug', 'description', 'price', 'stock', 'category']
+        fields = ['product_name', 'slug', 'description', 'price', 'stock', 'category', 'offer_percentage']
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
@@ -18,6 +18,7 @@ class ProductForm(forms.ModelForm):
         self.fields['price'].widget.attrs['placeholder'] = 'Price'
         self.fields['stock'].widget.attrs['placeholder'] = 'Stock'
         self.fields['category'].widget.attrs['placeholder'] = 'Select Category'
+        self.fields['offer_percentage'].widget.attrs['placeholder'] = 'Select Category'
 
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
@@ -65,3 +66,19 @@ class VariantForm(forms.ModelForm):
         if not variant_value or variant_value.isspace():
             raise forms.ValidationError("Description cannot be empty or contain only white spaces.")
         return variant_value.strip()
+
+class ProductOfferForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['product_name', 'offer_percentage']
+
+    def __init__(self, *args, **kwargs):
+        super(ProductOfferForm, self).__init__(*args, **kwargs)
+        self.fields['product_name'].widget.attrs['placeholder'] = 'Select Product'
+        self.fields['offer_percentage'].widget.attrs['placeholder'] = 'Offer Percentage'
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+    def clean(self):
+        cleaned_data = super(ProductOfferForm, self).clean()

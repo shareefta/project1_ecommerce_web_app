@@ -8,17 +8,17 @@ import uuid
 # Create your models here.
 
 class MyAccountManager(BaseUserManager):
-    def create_user(self, first_name, last_name, username, email, password=None):
+    def create_user(self, first_name, last_name, phone_number, email, password=None):
         if not email:
             raise ValueError('User must have an email address')
-        if not username:
-            raise ValueError('User must have an username')
+        # if not username:
+        #     raise ValueError('User must have an username')
 
         user = self.model(
-            email=self.normalize_email(email),
-            username=username,
-            first_name=first_name,
-            last_name=last_name
+            email = self.normalize_email(email),
+            phone_number = phone_number,
+            first_name = first_name,
+            last_name = last_name
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -40,27 +40,14 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class UserAccountManager(BaseUserManager):
-    def create_user_account(self, full_name, email, phone_number, password=None):
-        if not email:
-            raise ValueError('User must have an email address')
-        if not phone_number:
-            raise ValueError('User must have a phone number')
-
-        user = self.model(
-            email = self.normalize_email(email),
-            full_name = full_name,
-            phone_number = phone_number
-        )
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
 
 class Account(AbstractBaseUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=100, unique=True)
+    phone_number = models.CharField(max_length=12, unique=True, default='')
+    wallet = models.FloatField(null=True, default=0.0)
 
     #     Required
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -89,32 +76,8 @@ class Account(AbstractBaseUser):
         return True
 class Profile(models.Model):
     user = models.OneToOneField(Account, on_delete=models.CASCADE, related_name='profile')
-    phone_number = models.CharField(max_length=12, unique=True)
     otp = models.CharField(max_length=100, null=True, blank=True)
     uid = models.CharField(default=f'{uuid.uuid4}',max_length=200)
-
-class AccountUser(AbstractBaseUser):
-    full_name = models.CharField(max_length=50)
-    email = models.EmailField(max_length=100, unique=True)
-    phone_number = models.CharField(max_length=50, unique=True)
-    session = models.CharField(max_length=255, blank=True, null=True)
-
-    #     Required
-    date_joined = models.DateTimeField(auto_now_add=True)
-    last_login = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-
-    USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ['full_name', 'email', 'phone_number', 'password']
-
-    objects = UserAccountManager()
-
-    class Meta:
-        verbose_name = 'user account'
-        verbose_name_plural = 'user accounts'
-
-    def __str__(self):
-        return self.full_name
 
 class UserProfile(models.Model):
     user = models.OneToOneField(Account, on_delete=models.CASCADE)

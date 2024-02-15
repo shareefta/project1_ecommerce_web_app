@@ -26,7 +26,6 @@
                         </tr>
                         </thead>
                         <tbody>
-
                         {% for cart_item in cart_items %}
                         <tr>
                             <td>
@@ -39,9 +38,9 @@
                                             {{ cart_item.product.product_name }}</a>
                                         <p class="text-muted small">
                                             {% if cart_item.variant.all %}
-                                            {% for item in cart_item.variant.all %}
-                                            {{ item.variant_category | capfirst }}: {{ item.variant_value | capfirst }} <br>
-                                            {% endfor %}
+                                                {% for item in cart_item.variant.all %}
+                                                    {{ item.variant_category | capfirst }}: {{ item.variant_value | capfirst }} <br>
+                                                {% endfor %}
                                             {% endif %}
                                         </p>
                                     </figcaption>
@@ -73,10 +72,21 @@
                                 </div> <!-- col.// -->
                             </td>
                             <td>
-                                <div class="price-wrap">
-                                    <var class="price">Rs. {{ cart_item.sub_total }}</var>
-                                    <small class="text-muted"> Rs. {{ cart_item.product.price }} each </small>
-                                </div> <!-- price-wrap .// -->
+                                {% if cart_item.product.offer_percentage > 0 %}
+                                    <div class="price-wrap">
+                                        <var class="price">Rs. {{ cart_item.sub_total_offer }} </var>
+                                        <small class="badge bg-danger text-white h2 py-2">{{ cart_item.product.offer_percentage }}% off</small>
+                                        <br>
+                                        <small class="text-muted"> Rs. {{ cart_item.product.offer_price }} each </small>
+                                        <br>
+                                        <small class="text-muted">M.R.P.: Rs. <del>{{ cart_item.product.price }}</del></small>
+                                    </div> <!-- price-wrap .// -->
+                                {% else %}
+                                    <div class="price-wrap">
+                                        <var class="price">Rs. {{ cart_item.sub_total }} </var>
+                                        <small class="text-muted"> Rs. {{ cart_item.product.price }} each </small>
+                                    </div> <!-- price-wrap .// -->
+                                {% endif %}
                             </td>
                             <td class="text-right">
                                 <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}"
@@ -89,22 +99,27 @@
                     </table>
                 </div> <!-- card.// -->
             </aside> <!-- col.// -->
-            <aside class="col-lg-3">
 
+            <aside class="col-lg-3">
+                <!--Price Details-->
                 <div class="card">
                     <div class="card-body">
                         <dl class="dlist-align">
-                            <dt>Total Price:</dt>
-                            <dd class="text-right">Rs. {{ total }}</dd>
+                            <dt>Sub Total:</dt>
+                            <dd class="text-right">Rs. {{ total | floatformat:2 }}</dd>
                         </dl>
                         <dl class="dlist-align">
                             <dt>Tax:</dt>
-                            <dd class="text-right"> Rs. {{ tax }}</dd>
+                            <dd class="text-right"> Rs. {{ tax | floatformat:2 }}</dd>
                         </dl>
                         <dl class="dlist-align">
                             <dt>Grand Total:</dt>
-                            <dd class="text-right text-dark b"><strong>Rs. {{ grand_total }}</strong></dd>
+                            <dd class="text-right text-dark b"><strong>Rs. {{ grand_total | floatformat:2 }}</strong></dd>
                         </dl>
+                        {% if total_discount > 0 %}
+                            <hr>
+                        <p class="text-center mb-3 ">You have saved! <strong>Rs. {{ total_discount | floatformat:2 }}</strong></p>
+                        {% endif %}
                         <hr>
                         <p class="text-center mb-3">
                             <img src="{% static './images/misc/payments.png' %}" height="26">
